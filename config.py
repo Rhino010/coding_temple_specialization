@@ -9,4 +9,3 @@ class DevelopmentConfig:
 
     class ProductionConfig:
         pass
-    

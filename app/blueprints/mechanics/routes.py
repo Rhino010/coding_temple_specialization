@@ -4,9 +4,12 @@ from flask import Flask, request, jsonify
 from marshmallow import ValidationError
 from app.models import Mechanic, db
 from sqlalchemy import select, delete
+from app.extensions import limiter, cache
 
 # ------------------------------Mechanic Routes----------------------------------------------
 @mechanics_bp.route("/", methods=['POST'])
+@limiter.limit("3 per hour")
+# adding limits to post routes to prevent spamming new mechanics
 def create_mechanic():
     try:
         mechanic_data = mechanic_schema.load(request.json)
@@ -21,6 +24,7 @@ def create_mechanic():
     return mechanic_schema.jsonify(new_mechanic), 201
 
 @mechanics_bp.route("/", methods=["GET"])
+@cache.cached(timeout=60)
 def get_mechanics():
     query = select(Mechanic)
     result = db.session.execute(query).scalars().all()
@@ -28,6 +32,8 @@ def get_mechanics():
     return mechanics_schema.jsonify(result), 200
 
 @mechanics_bp.route("/<int:mechanic_id>", methods=["PUT"])
+@limiter.limit("3 per hour")
+# should not be a reason to update details of employees that often
 def update_mechanic(mechanic_id):
     query = select(Mechanic).where(Mechanic.id == mechanic_id)
     mechanic = db.session.execute(query).scalars().first()
@@ -57,3 +63,12 @@ def delete_mechanic(mechanic_id):
     db.session.commit()
 
     return jsonify({"message" : f"{mechanic_id} mechanic deleted successfully"})
+
+@mechanics_bp.route("/popular", methods=["GET"])
+def popular_books():
+    query = select(Mechanic)
+    mechanics = db.session.execute(query).scalars().all()
+
+    mechanics.sort(key = lambda mechanic: len(mechanic.service_tickets), reverse=True)
+
+    return mechanics_schema.jsonify(mechanics)
