@@ -9,7 +9,7 @@ class ServiceTicketSchema(ma.SQLAlchemyAutoSchema):
 
         class Meta:
                 model = ServiceTicket
-                fields = ("customer_id", "mechanic_ids", "date", "serv_desc", "vin", "mechanics", "customer")
+                fields = ("id", "customer_id", "mechanic_ids", "date", "serv_desc", "vin", "mechanics", "customer")
 
 class EditServiceSchema(ma.Schema):
     add_mechanic_ids = fields.List(fields.Int(), required=True)

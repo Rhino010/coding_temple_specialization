@@ -345,6 +345,34 @@ paths:
             application/json:
               type: "object"
 
+  /service_tickets/{id}:
+    put:
+        tags:
+          - Service Tickets
+        summary: "Enpoint to update a specific service ticket"
+        description: "Endpoint to update a specific service ticket using its id. Adding and removing mechanics ids are the only thing updated."
+        parameters:
+          - in: "path"
+            name: "id"
+            type: "integer"
+            description: "ID of the service ticket to update."
+            required: true
+          - in: "body"
+            name: "body"
+            required: true
+            description: "Updated service ticket information."
+            schema:
+              $ref: "#/definitions/UpdateServiceTicketPayload"
+        responses:
+          200:
+            descriptions: "Successful service ticket update"
+            schema:
+              $ref: "#/definitions/UpdateServiceTicketResponse"
+            examples:
+              application/json:
+                add_mechanic_ids: [2, 3]
+                remove_mechanic_ids: [4]
+
   /service_tickets/my_tickets:
     get:
       tags: 
@@ -745,3 +773,37 @@ definitions:
                 type: string
               salary:
                 type: number
+  
+  UpdateServiceTicketPayload:
+    type: "object"
+    properties:
+      add_mechanic_ids:
+        type: "array"
+        items:
+          type: "integer"
+      remove_mechanic_ids:
+        type: "array"
+        items:
+          type: "integer"
+
+    required:
+      - add_mechanic_ids
+      - remove_mechanic_ids
+
+
+  UpdateServiceTicketResponse:
+    type: "array"
+    items:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+        date:
+          type: "string"
+          format: "date"
+        serv_desc:
+          type: "string"
+        vin:
+          type: "string"
+        customer_id:
+          type: "integer"
