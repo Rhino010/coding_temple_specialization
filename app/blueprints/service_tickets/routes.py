@@ -26,7 +26,7 @@ def create_service_ticket():
         if mechanic:
             new_service_ticket.mechanics.append(mechanic)
         else:
-            return jsonify({"message": "invalid book id"})
+            return jsonify({"message": "invalid mechanic id"})
 
     db.session.add(new_service_ticket)
     db.session.commit()
@@ -47,7 +47,7 @@ def get_customer_tickets(customer_id):
     query = select(ServiceTicket).where(ServiceTicket.customer_id == customer_id)
     customer_record = db.session.execute(query).scalars()
 
-    return service_tickets_schema.jsonify(customer_record)
+    return service_tickets_schema.jsonify(customer_record), 200
 
 @service_tickets_bp.route("/<int:service_ticket_id>", methods=["PUT"])
 def edit_service_ticket(service_ticket_id):
