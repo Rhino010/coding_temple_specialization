@@ -41,7 +41,7 @@ def get_service_tickets():
 
     return service_tickets_schema.jsonify(result), 200
 
-@service_tickets_bp.route("/my-tickets", methods=["GET"])
+@service_tickets_bp.route("/my_tickets", methods=["GET"])
 @token_required
 def get_customer_tickets(customer_id):
     query = select(ServiceTicket).where(ServiceTicket.customer_id == customer_id)

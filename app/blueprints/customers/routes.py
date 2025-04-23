@@ -2,11 +2,10 @@ from app.blueprints.customers import customers_bp
 from app.blueprints.customers.schemas import customer_schema, customers_schema, login_schema
 from flask import Flask, request, jsonify
 from marshmallow import ValidationError
-from app.models import Customer, ServiceTicket, db
+from app.models import Customer, db
 from sqlalchemy import select, delete
 from app.extensions import limiter, cache
 from app.utils.util import encode_token, token_required
-from app.blueprints.service_tickets.schemas import service_ticket_schema, service_tickets_schema
 
 
 
@@ -36,7 +35,7 @@ def login():
         return jsonify(response), 200
     
     else:
-        return jsonify({"message": "Invalid email or password."})
+        return jsonify({"message": "Invalid email or password."}), 400
 
 
 @customers_bp.route("/", methods=['POST'])
@@ -53,6 +52,7 @@ def create_customer():
     db.session.commit()
 
     return customer_schema.jsonify(new_customer), 201
+
 @customers_bp.route("/", methods=["GET"])
 @cache.cached(timeout=60)
 def get_customers():
