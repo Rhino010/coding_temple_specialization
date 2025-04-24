@@ -31,7 +31,7 @@ def create_service_ticket():
     db.session.add(new_service_ticket)
     db.session.commit()
     
-    return service_ticket_schema.jsonify(new_service_ticket)
+    return service_ticket_schema.jsonify(new_service_ticket), 200
 
 @service_tickets_bp.route("/", methods=["GET"])
 @cache.cached(timeout=60)

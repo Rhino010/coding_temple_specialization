@@ -80,17 +80,11 @@ class TestCustomer(unittest.TestCase):
         self.assertEqual(response.json['name'], 'updated_user')
         self.assertEqual(response.json['email'], 'test@email.com')
 
-        # def (self):
+    def test_delete_customer(self):
+        headers = {'Authorization' : "Bearer " + self.test_login_customer()}
+        response = self.client.delete('/customers/', headers=headers)
+        self.assertEqual(response.status_code, 200)
 
-    #     response = self.client.post('/customers/', json=)
-    #     self.assertEqual(response.status_code,)
-    #     self.assertEqual(response.json)
-
-        # def (self):
-
-    #     response = self.client.post('/customers/', json=)
-    #     self.assertEqual(response.status_code,)
-    #     self.assertEqual(response.json)
 
 
 # python -m unittest discover tests
