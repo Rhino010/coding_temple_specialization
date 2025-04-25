@@ -6,9 +6,9 @@ info:
   title: "Auto Shop API"
   description: "This API is intended to provide all information from customers to shop info"
   version: "1.0.0"
-host: "127.0.0.1:5000"
+host: "coding-temple-specialization.onrender.com"
 schemes:
-  - "http"
+  - "https"
 consumes:
   - "application/json"
 produces:
